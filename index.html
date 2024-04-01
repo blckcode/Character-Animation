@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Walking Animation</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="700" height="400"></canvas>
+  <script>
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+    var isCharShowed = false;
+    var isBackgroundLoaded = false;
+
+    // Background
+    var background = new Image();
+    background.src = 'bg.png';  
+    background.onload = function () {
+      isBackgroundLoaded = true;
+    }
+
+    var char = new Image();
+    char.src = 'myCharacter.png';
+    char.onload = function () {
+      isCharShowed = true;
+    }
+
+    var cellWidth = 180;
+    var cellHeight = 500;
+    var currentCell = 0;
+
+    var moveAmount = 15;
+    var moveX = 1;
+    var directionX = 1;
+    var mirror = false;
+
+    animate();
+    var animationStart = new Date();
+    function animate() {
+      var animationNow = new Date();
+      if (animationNow - animationStart >= 200) {
+        animationStart = animationNow;
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        currentCell++;
+        currentCell %= 17;
+
+        if (moveX >= canvas.width) {
+          moveX = -1 * cellWidth;
+        }
+        else {
+          moveX += moveAmount;
+        }
+        if (isBackgroundLoaded) {
+          context.drawImage(background, 0, 0, canvas.width, canvas.height);
+        }
+
+        if (isCharShowed) {
+
+            context.drawImage(char, currentCell * cellWidth, 0, cellWidth, cellHeight, moveX, 190, 100, 300);
+        }
+      }
+      window.requestAnimationFrame(animate);
+    }
+  </script>
+</body>
+</html>
